@@ -38,4 +38,6 @@ func SetRoutes() {
 	// upload
 	RootApi.Post("/upload/ali_bill", iris.LimitRequestBodySize(5<<20), myapi.UploadAliBill)
 
+	RootApi.Get("/download/demo1", myapi.ExcelDownloadDemo1)
+	RootApi.Get("/download/demo2", myapi.ExcelDownloadDemo2)
 }
