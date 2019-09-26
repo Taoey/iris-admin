@@ -40,4 +40,5 @@ func SetRoutes() {
 
 	RootApi.Get("/download/demo1", myapi.ExcelDownloadDemo1)
 	RootApi.Get("/download/demo2", myapi.ExcelDownloadDemo2)
+	RootApi.Get("/download/demo3", myapi.ExcelDownloadDemo3)
 }

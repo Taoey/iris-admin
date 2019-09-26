@@ -37,3 +37,10 @@ func ExcelDownloadDemo2(ctx iris.Context) {
 	ctx.Header("Content-Disposition", fmt.Sprintf("attachment; filename=%s", filename))
 	ctx.Write(data)
 }
+
+func ExcelDownloadDemo3(ctx iris.Context) {
+	filename := "./data1.txt1"
+	filepath := filename
+
+	ctx.SendFile(filepath, "11.txt")
+}
