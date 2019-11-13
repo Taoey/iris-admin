@@ -1,8 +1,8 @@
 package myinit
 
 import (
-	"github.com/Taoey/iris-cli/src/system/job"
 	"github.com/bamzi/jobrunner"
+	"github_com_Taoey_iris_cli/src/system/job"
 )
 
 func InitQuartz() {

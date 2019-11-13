@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/Taoey/iris-cli/src/modules/myapi"
-	"github.com/Taoey/iris-cli/src/myinit"
 	"github.com/kataras/iris"
+	"github_com_Taoey_iris_cli/src/modules/myapi"
+	"github_com_Taoey_iris_cli/src/myinit"
 	"log"
 )
 
@@ -19,9 +19,9 @@ func main() {
 	// 初始化App
 	App = iris.New()
 	SetRoutes()
-
 	// 启动
-	run := App.Run(iris.Addr(myinit.GCF.UString("server.url")), iris.WithCharset("UTF-8"))
+	url := myinit.GCF.UString("server.url")
+	run := App.Run(iris.Addr(url), iris.WithCharset("UTF-8"))
 	log.Fatal(run)
 }
 
@@ -41,4 +41,11 @@ func SetRoutes() {
 	RootApi.Get("/download/demo1", myapi.ExcelDownloadDemo1)
 	RootApi.Get("/download/demo2", myapi.ExcelDownloadDemo2)
 	RootApi.Get("/download/demo3", myapi.ExcelDownloadDemo3)
+	RootApi.Get("/download/demo4", myapi.DownloadLimite)
+	RootApi.Get("/download/demo5", myapi.SendURLFile) //http://localhost:9005/api/download/demo4
+
+	RootApi.Get("/redirect/", myapi.RedirectURL)
+
+	// 读取post信息
+	RootApi.Post("/post/jsondemo", myapi.PostAcceptJson)
 }

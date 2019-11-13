@@ -2,9 +2,11 @@ package myapi
 
 import (
 	"fmt"
+	"github.com/juju/ratelimit"
 	"github.com/kataras/iris"
 	"io/ioutil"
 	"os"
+	"time"
 )
 
 // 官方下载示例 https://www.studyiris.com/example/fileServer/sendFiles.html
@@ -43,4 +45,47 @@ func ExcelDownloadDemo3(ctx iris.Context) {
 	filepath := filename
 
 	ctx.SendFile(filepath, "11.txt")
+}
+
+// url对应的资源需要配置Nginx服务器
+func SendURLFile(ctx iris.Context) {
+	ctx.Redirect("http://url", 302)
+}
+
+// 使用令牌桶限速下载
+func DownloadLimite(ctx iris.Context) {
+	pwd, _ := os.Getwd()
+
+	filedir := pwd + "/files/"
+	filename := "android-studio-ide-191.5791312-windows.exe"
+	filepath := filedir + filename
+
+	f, _ := os.Open(filepath)
+	defer f.Close()
+
+	data, _ := ioutil.ReadAll(f)
+
+	ctx.Header("Content-Disposition", fmt.Sprintf("attachment; filename=%s", filename))
+
+	current := 0
+	bucket := ratelimit.NewBucket(time.Nanosecond, 10000)
+	go func() {
+		for {
+			fmt.Println(bucket.Available(), current, len(data), current/len(data)*100)
+			time.Sleep(time.Millisecond * 200)
+		}
+	}()
+	var timeOut int64 = 1000 * 3
+	startTime := time.Now().UnixNano() / 1e6
+	for current < len(data) {
+		currentTime := time.Now().UnixNano() / 1e6
+		if currentTime-startTime <= timeOut {
+			bucket.Wait(100)
+			ctx.ResponseWriter().Write(data[current : current+100])
+			current = current + 100
+		} else {
+			ctx.ResponseWriter().CloseNotify()
+			return
+		}
+	}
 }

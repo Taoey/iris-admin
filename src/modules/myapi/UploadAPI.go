@@ -1,9 +1,9 @@
 package myapi
 
 import (
-	. "github.com/Taoey/iris-cli/src/entity"
-	"github.com/Taoey/iris-cli/src/modules/myservice"
 	"github.com/kataras/iris"
+	. "github_com_Taoey_iris_cli/src/entity"
+	"github_com_Taoey_iris_cli/src/modules/myservice"
 	"io/ioutil"
 )
 
